@@ -127,6 +127,7 @@ export default {
         mobile: "",
         username: "",
         password: "",
+        pwd: "",
       },
       searchForm: {
         // 请求参数
@@ -416,6 +417,7 @@ export default {
     },
     //添加会员提交
     addMemberSubmit() {
+      this.addMemberForm.pwd = this.addMemberForm.password;
       this.addMemberForm.password = this.md5(this.addMemberForm.password);
       this.$refs.addMemberForm.validate((valid) => {
         if (valid) {
@@ -484,6 +486,7 @@ export default {
         submit.region = this.region;
       }
       if (newPassword) {
+        submit.pwd = newPassword;
         submit.password = this.md5(newPassword);
       }
       API_Member.updateMember(submit).then((res) => {

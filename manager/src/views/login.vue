@@ -1,5 +1,6 @@
 <template>
-  <div class="login" @click="$refs.verify.show = false">
+<!--  <div class="login" @click="$refs.verify.show = false">-->
+  <div class="login">
     <Row @keydown.enter.native="submitLogin" class="flex">
       <Col style="width: 368px">
         <Header />
@@ -31,6 +32,7 @@
                 autocomplete="off"
               />
             </FormItem>
+            <Checkbox v-model="checked" class="rememberMe">记住密码</Checkbox>
           </Form>
 
           <Row>
@@ -48,15 +50,15 @@
           </Row>
         </Row>
         <!-- 拼图验证码 -->
-        <verify
-          ref="verify"
-          class="verify-con"
-          verifyType="LOGIN"
-          @change="verifyChange"
-        ></verify>
-        <Footer />
+<!--        <verify-->
+<!--          ref="verify"-->
+<!--          class="verify-con"-->
+<!--          verifyType="LOGIN"-->
+<!--          @change="verifyChange"-->
+<!--        ></verify>-->
+<!--        <Footer />-->
       </Col>
-      <!-- <LangSwitch /> -->
+       <LangSwitch />
     </Row>
   </div>
 </template>
@@ -80,12 +82,14 @@ export default {
   data() {
     return {
       loading: false, // 加载状态
+      checked:false,
+      isCookie:false,
       form: {
         // 表单数据
         username: "",
         password: "",
-        mobile: "",
-        code: "",
+        // mobile: "",
+        // code: "",
       },
       rules: {
         // 验证规则
@@ -105,6 +109,9 @@ export default {
         ],
       },
     };
+  },
+  mounted() {
+    this.getCookie()
   },
   methods: {
     afterLogin(res) {
@@ -132,32 +139,80 @@ export default {
       // 登录操作
       this.$refs.usernameLoginForm.validate((valid) => {
         if (valid) {
-          this.$refs.verify.init();
+          if(this.checked){
+            this.isCookie?this.form.password = this.form.password:this.form.password = this.md5(this.form.password)
+            this.setCookie(this.form.username,this.form.password,7)
+          }else{
+            this.form.password = this.md5(this.form.password) //md5加密
+            this.setCookie("","",-1);
+          }
+          let fd = new FormData();
+            fd.append("username", this.form.username);
+            fd.append("password", this.form.password);
+          login(fd)
+            .then((res) => {
+              if (res && res.success) {
+                this.afterLogin(res);
+              } else {
+                this.loading = false;
+              }
+            })
+            .catch(() => {
+              this.loading = false;
+            });
+          // this.$refs.verify.show = false;
         }
       });
     },
-    verifyChange(con) {
-      // 拼图验证码回显
-      if (!con.status) return;
-
-      this.loading = true;
-
-      let fd = new FormData();
-      fd.append("username", this.form.username);
-      fd.append("password", this.md5(this.form.password));
-      login(fd)
-        .then((res) => {
-          if (res && res.success) {
-            this.afterLogin(res);
-          } else {
-            this.loading = false;
-          }
-        })
-        .catch(() => {
-          this.loading = false;
-        });
-      this.$refs.verify.show = false;
+    //设置cookie
+    setCookie(username,password,days){
+      let date = new Date()
+      date.setTime(date.getTime() + 24*60*60*1000*days) //保存天数
+      //字符串拼接cookie
+      window.document.cookie = "username"+"="+username+";path=/;expires="+date.toGMTString()
+      window.document.cookie = "password"+"="+password+";path=/;expires="+date.toGMTString()
     },
+    //读取cookie
+    getCookie() {
+      if (document.cookie.length > 0) {
+        let arr = document.cookie.split("; "); //分割成一个个独立的“key=value”的形式
+        console.log(arr)
+        for (let i = 0; i < arr.length; i++) {
+          let arr2 = arr[i].split("="); // 再次切割，arr2[0]为key值，arr2[1]为对应的value
+          if (arr2[0] === "username") {
+            this.form.username = arr2[1];
+          } else if (arr2[0] === "password") {
+            this.form.password = arr2[1];
+            if(this.form.password !=""){
+              this.isCookie = true;
+            }
+            this.checked = true;
+          }
+        }
+      }
+    },
+    // verifyChange(con) {
+    //   // 拼图验证码回显
+    //   if (!con.status) return;
+    //
+    //   this.loading = true;
+    //
+    //   let fd = new FormData();
+    //   fd.append("username", this.form.username);
+    //   fd.append("password", this.md5(this.form.password));
+    //   login(fd)
+    //     .then((res) => {
+    //       if (res && res.success) {
+    //         this.afterLogin(res);
+    //       } else {
+    //         this.loading = false;
+    //       }
+    //     })
+    //     .catch(() => {
+    //       this.loading = false;
+    //     });
+    //   this.$refs.verify.show = false;
+    // },
   },
 };
 </script>

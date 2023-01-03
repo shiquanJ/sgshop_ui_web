@@ -211,25 +211,25 @@
               <FormItem label="法人证件号" prop="legalId">
                 <Input v-model="shopForm.legalId" clearable style="width: 200px" />
               </FormItem>
-              <FormItem label="法人身份证照片" prop="legalPhoto">
-                <Avatar
-                  class="legal-photo"
-                  shape="square"
-                  size="100"
-                  icon="md-add"
-                  @click.native="handleCLickImg('legalPhoto', 0)"
-                  :src="shopForm.legalPhoto[0]"
-                />
-                <Avatar
-                  class="ml_10 legal-photo"
-                  shape="square"
-                  size="100"
-                  icon="md-add"
-                  @click.native="handleCLickImg('legalPhoto', 1)"
-                  :src="shopForm.legalPhoto[1]"
-                />
-                <span>点击图片上传身份证正反面，要求身份证清晰，四角无缺漏</span>
-              </FormItem>
+<!--              <FormItem label="法人身份证照片" prop="legalPhoto" v-show="isLegalPhoto">-->
+<!--                <Avatar-->
+<!--                  class="legal-photo"-->
+<!--                  shape="square"-->
+<!--                  size="100"-->
+<!--                  icon="md-add"-->
+<!--                  @click.native="handleCLickImg('legalPhoto', 0)"-->
+<!--                  :src="shopForm.legalPhoto[0]"-->
+<!--                />-->
+<!--                <Avatar-->
+<!--                  class="ml_10 legal-photo"-->
+<!--                  shape="square"-->
+<!--                  size="100"-->
+<!--                  icon="md-add"-->
+<!--                  @click.native="handleCLickImg('legalPhoto', 1)"-->
+<!--                  :src="shopForm.legalPhoto[1]"-->
+<!--                />-->
+<!--                <span>点击图片上传身份证正反面，要求身份证清晰，四角无缺漏</span>-->
+<!--              </FormItem>-->
 
               <Divider orientation="left">结算银行信息</Divider>
               <FormItem label="银行开户名" prop="settlementBankAccountName">
@@ -463,7 +463,7 @@ export default {
             trigger: "blur",
           },
         ],
-        companyAddressIdPath: [{ required: true, message: "请选择公司地址" }],
+        // companyAddressIdPath: [{ required: true, message: "请选择公司地址" }],
         registeredCapital: [
           {
             required: true,
@@ -472,7 +472,7 @@ export default {
             trigger: "blur",
           },
         ],
-        linkName: [{ required: true, message: "联系人姓名不能为空" }],
+        linkName: [{ required: false, message: "联系人姓名不能为空" }],
         linkPhone: [
           { required: true, message: "联系人手机号不能为空" },
           {
@@ -483,17 +483,17 @@ export default {
           },
         ],
         companyEmail: [
-          { required: true, message: "邮箱不能为空" },
+          { required: false, message: "邮箱不能为空" },
           { type: "email", message: "邮箱格式错误" },
         ],
-        licenseNum: [{ required: true, message: "营业执照号不能为空" }],
-        scope: [{ required: true, message: "法定经营范围不能为空" }],
-        legalName: [{ required: true, message: "法人姓名不能为空" }],
-        legalId: [{ required: true, message: "法人证件号不能为空" }],
-        settlementBankAccountName: [{ required: true, message: "银行开户名不能为空" }],
-        settlementBankAccountNum: [{ required: true, message: "银行账号不能为空" }],
-        settlementBankBranchName: [{ required: true, message: "银行支行名称不能为空" }],
-        settlementBankJointName: [{ required: true, message: "支行联行号不能为空" }],
+        // licenseNum: [{ required: true, message: "营业执照号不能为空" }],
+        // scope: [{ required: true, message: "法定经营范围不能为空" }],
+        // legalName: [{ required: true, message: "法人姓名不能为空" }],
+        // legalId: [{ required: true, message: "法人证件号不能为空" }],
+        // settlementBankAccountName: [{ required: true, message: "银行开户名不能为空" }],
+        // settlementBankAccountNum: [{ required: true, message: "银行账号不能为空" }],
+        // settlementBankBranchName: [{ required: true, message: "银行支行名称不能为空" }],
+        // settlementBankJointName: [{ required: true, message: "支行联行号不能为空" }],
 
         salesConsigneeMobile: [
           {
@@ -506,9 +506,10 @@ export default {
       },
       indeterminate: true, // 复选框全选样式
       checkAll: false, // 全选
-      checkAllGroup: [], // 全选数组
+      checkAllGroup: ["test"], // 全选数组
       submitLoading: false, // 添加或编辑提交状态
       settlementCycle: [], // 结算周期
+      isLegalPhoto:true,
       shopForm: {
         // 店铺数据
         settlementCycle: "",
@@ -661,17 +662,24 @@ export default {
     getShopDetail() {
       shopDetail(this.shopId).then((res) => {
         if (res.success) {
+          if(this.shopForm.legalPhoto[0] == ""){
+            this.isLegalPhoto = false;
+          }
+          console.log(this.shopForm.legalPhoto[0])
           this.infoResult = res.result;
           this.shopForm = res.result;
           this.shopForm.selfOperated
             ? (this.shopForm.selfOperated = "true")
             : (this.shopForm.selfOperated = "false");
-
-          this.checkAllGroup = this.shopForm.goodsManagementCategory.split(",");
+          if(this.shopForm.goodsManagementCategory.split(",")>0){
+            this.checkAllGroup = this.shopForm.goodsManagementCategory.split(",");
+          }
           if (this.shopForm.settlementCycle) {
             this.settlementCycle = this.shopForm.settlementCycle.split(",");
           }
-          this.shopForm.legalPhoto = this.shopForm.legalPhoto.split(",");
+          if(this.shopForm.legalPhoto.split(",").length>0){
+            this.shopForm.legalPhoto = this.shopForm.legalPhoto.split(",");
+          }
 
           this.address = this.shopForm.companyAddressIdPath;
           this.returnAddress = this.shopForm.salesConsigneeAddressId;
@@ -682,21 +690,21 @@ export default {
     save() {
       this.$refs.shopForm.validate((valid) => {
         //校验结算日是否已经确认完成
-        if (this.settlementShow) {
-          this.$Message.error("请确认当前所填结算日信息");
-          return;
-        }
-        //校验经营类目
-        if (this.checkAllGroup == "") {
-          this.$Message.error("请选择店铺经营类目");
-          this.tabName = "cagetory";
-          return;
-        }
+        // if (this.settlementShow) {
+        //   this.$Message.error("请确认当前所填结算日信息");
+        //   return;
+        // }
+        // //校验经营类目
+        // if (this.checkAllGroup == "") {
+        //   this.$Message.error("请选择店铺经营类目");
+        //   this.tabName = "cagetory";
+        //   return;
+        // }
         if (valid) {
           const params = JSON.parse(JSON.stringify(this.shopForm));
           //处理经营类目，结算日
-          params.goodsManagementCategory = this.checkAllGroup;
-          params.settlementCycle = this.settlementCycle;
+          // params.goodsManagementCategory = this.checkAllGroup;
+          // params.settlementCycle = this.settlementCycle;
           if (this.shopId) {
             delete params.memberId;
             shopEdit(this.shopId, params).then((res) => {
