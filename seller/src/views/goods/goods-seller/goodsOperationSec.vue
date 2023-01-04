@@ -185,7 +185,7 @@
               label="商品图片"
               prop="goodsGalleryFiles"
             >
-              <div style="display: flex; flex-wrap: flex-start">
+              <div style="display: flex; flex-wrap: flex-start;">
                 <vuedraggable
                   :animation="200"
                   :list="baseInfoForm.goodsGalleryFiles"
@@ -492,7 +492,7 @@
                               :on-exceeded-size="handleMaxSize"
                               :on-format-error="handleFormatError"
                               :on-success="handleSuccess"
-                              :show-upload-list="false"
+                              :show-upload-list="true"
                               multiple
                               style="display: inline-block; width: 58px"
                               type="drag"
@@ -852,10 +852,10 @@ export default {
         goodsName: [regular.REQUIRED, regular.WHITE_SPACE, regular.VARCHAR60],
         price: [regular.REQUIRED, { validator: checkPrice }],
         sellingPoint: [regular.REQUIRED, regular.VARCHAR60],
-        goodsUnit: [{ required: true, message: "请选择计量单位" }],
+        goodsUnit: [{ required: false, message: "请选择计量单位" }],
         name: [regular.REQUIRED, regular.VARCHAR5],
         value: [regular.REQUIRED, regular.VARCHAR60],
-        templateId: [regular.REQUIRED],
+        //templateId: [regular.false],
         weight: [regular.REQUIRED],
       },
       params: {
@@ -964,6 +964,7 @@ export default {
     },
     // 查看商品大图
     handleViewGoodsPicture(url) {
+      console.log('url::'+url)
       this.previewGoodsPicture = url;
       this.goodsPictureVisible = true;
     },
@@ -1055,6 +1056,8 @@ export default {
     },
     // 商品图片上传成功
     handleSuccessGoodsPicture(res, file) {
+      console.log('res::'+JSON.stringify(res))
+      console.log('file::'+JSON.stringify(file))
       if (file.response) {
         file.url = file.response.result;
         this.baseInfoForm.goodsGalleryFiles.push(file);

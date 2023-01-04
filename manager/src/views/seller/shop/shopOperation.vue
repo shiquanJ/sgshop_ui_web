@@ -149,13 +149,13 @@
               <FormItem label="公司电话" prop="companyPhone">
                 <Input v-model="shopForm.companyPhone" clearable style="width: 350px" />
               </FormItem>
-              <FormItem label="公司所在地" prop="companyAddressIdPath">
+<!--              <FormItem label="公司所在地" prop="companyAddressIdPath">
                 <region
                   style="width: 350px"
                   @selected="selectedRegion"
                   :addressId="address"
                 />
-              </FormItem>
+              </FormItem>-->
               <FormItem label="公司详细地址" prop="companyAddress">
                 <Input v-model="shopForm.companyAddress" clearable style="width: 350px" />
               </FormItem>
@@ -463,7 +463,7 @@ export default {
             trigger: "blur",
           },
         ],
-        companyAddressIdPath: [{ required: true, message: "请选择公司地址" }],
+        companyAddressIdPath: [{ required: false, message: "请选择公司地址" }],
         registeredCapital: [
           {
             required: true,
@@ -472,7 +472,7 @@ export default {
             trigger: "blur",
           },
         ],
-        linkName: [{ required: true, message: "联系人姓名不能为空" }],
+        linkName: [{ required: true, messa18640844669ge: "联系人姓名不能为空" }],
         linkPhone: [
           { required: true, message: "联系人手机号不能为空" },
           {
@@ -486,14 +486,14 @@ export default {
           { required: true, message: "邮箱不能为空" },
           { type: "email", message: "邮箱格式错误" },
         ],
-        licenseNum: [{ required: true, message: "营业执照号不能为空" }],
-        scope: [{ required: true, message: "法定经营范围不能为空" }],
-        legalName: [{ required: true, message: "法人姓名不能为空" }],
-        legalId: [{ required: true, message: "法人证件号不能为空" }],
-        settlementBankAccountName: [{ required: true, message: "银行开户名不能为空" }],
-        settlementBankAccountNum: [{ required: true, message: "银行账号不能为空" }],
-        settlementBankBranchName: [{ required: true, message: "银行支行名称不能为空" }],
-        settlementBankJointName: [{ required: true, message: "支行联行号不能为空" }],
+        licenseNum: [{ required: false, message: "营业执照号不能为空" }],
+        scope: [{ required: false, message: "法定经营范围不能为空" }],
+        legalName: [{ required: false, message: "法人姓名不能为空" }],
+        legalId: [{ required: false, message: "法人证件号不能为空" }],
+        settlementBankAccountName: [{ required: false, message: "银行开户名不能为空" }],
+        settlementBankAccountNum: [{ required: false, message: "银行账号不能为空" }],
+        settlementBankBranchName: [{ required: false, message: "银行支行名称不能为空" }],
+        settlementBankJointName: [{ required: false, message: "支行联行号不能为空" }],
 
         salesConsigneeMobile: [
           {
@@ -682,7 +682,7 @@ export default {
     save() {
       this.$refs.shopForm.validate((valid) => {
         //校验结算日是否已经确认完成
-        if (this.settlementShow) {
+        /*if (this.settlementShow) {
           this.$Message.error("请确认当前所填结算日信息");
           return;
         }
@@ -691,7 +691,8 @@ export default {
           this.$Message.error("请选择店铺经营类目");
           this.tabName = "cagetory";
           return;
-        }
+        }*/
+        console.log(valid)
         if (valid) {
           const params = JSON.parse(JSON.stringify(this.shopForm));
           //处理经营类目，结算日
@@ -700,6 +701,7 @@ export default {
           if (this.shopId) {
             delete params.memberId;
             shopEdit(this.shopId, params).then((res) => {
+              console.log('res::'+res)
               if (res.success) {
                 this.$Message.success("编辑成功");
                 this.$router.push({ name: "shopList" });
@@ -715,7 +717,7 @@ export default {
               if (resp.success) {
                 this.$Message.success("添加成功");
                 this.shopForm = {};
-                this.$router.push({ name: "shopList" });
+                this.$router.push({ name: "shopAuth" });
               }
             });
           }
@@ -777,7 +779,7 @@ export default {
           this.auditModel = false;
           if (res.success) {
             this.$Message.success("操作成功");
-            this.$router.push({ name: "shopAuth" });
+            this.$router.push({ name: "shopList" });
           }
         });
       } else {
@@ -785,7 +787,7 @@ export default {
           this.auditModel = false;
           if (res.success) {
             this.$Message.success("操作成功");
-            this.$router.push({ name: "shopAuth" });
+            this.$router.push({ name: "shopList" });
           }
         });
       }

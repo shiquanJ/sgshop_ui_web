@@ -12,7 +12,7 @@ export default {
   // name: "header",
   data() {
     return {
-      storeSideLogo: require("@/assets/logo.png"),
+      storeSideLogo: require("@/assets/logo.jpg"),
     };
   },
   methods: {

@@ -184,6 +184,7 @@ export default {
     // 获取商品模板
     GET_GoodsTemplate() {
       API_GOODS.getDraftGoodsListData(this.searchParams).then((res) => {
+        console.log(JSON.stringify(res))
         if (res.success) {
           this.goodsTemplates.push(...res.result.records);
           this.templateTotal = res.result.total;
@@ -230,10 +231,22 @@ export default {
       if (!this.category[0].name) {
         this.$Message.error("请选择商品分类");
         return;
-      } else if (!this.category[2].name) {
+      }
+      let params = {
+        category: this.category,
+        goodsType: this.goodsType,
+      };
+      if (this.selectedTemplate.id) {
+        params.tempId = this.selectedTemplate.id;
+        this.$emit("change", params);
+      } else {
+        this.$emit("change", params);
+      }
+      /*else if (!this.category[2].name) {
         this.$Message.error("必须选择到三级分类");
         return;
-      } else if (this.category[2].name) {
+      }
+      else if (this.category[2].name) {
         let params = {
           category: this.category,
           goodsType: this.goodsType,
@@ -244,7 +257,7 @@ export default {
         } else {
           this.$emit("change", params);
         }
-      }
+      }*/
     },
   },
   mounted() {
