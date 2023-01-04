@@ -148,7 +148,24 @@ export default {
       // 登录提交
       this.$refs.usernameLoginForm.validate((valid) => {
         if (valid) {
-          this.$refs.verify.init();
+          //this.$refs.verify.init();
+          this.loading = true;
+
+          let fd = new FormData();
+          fd.append("username", this.form.username);
+          fd.append("password", this.md5(this.form.password));
+          login(fd)
+            .then((res) => {
+              console.log('res::'+res)
+              this.loading = false;
+              if (res && res.success) {
+                this.afterLogin(res);
+              }
+            })
+            .catch(() => {
+              this.loading = false;
+            });
+          this.$refs.verify.show = false;
         }
       });
     },

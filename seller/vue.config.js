@@ -61,6 +61,7 @@ let jsPlugin = [
 ];
 // 判断是否需要加载CDN
 cdn = enableProduction && configs.enableCDN ? cdn : { css: [], js: [] };
+console.log(cdn)
 externals = enableProduction && configs.enableCDN  ? externals : {};
 jsPlugin = enableProduction ? jsPlugin : [];
 

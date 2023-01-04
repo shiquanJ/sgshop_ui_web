@@ -1,6 +1,5 @@
 <template>
-<!--  <div class="login" @click="$refs.verify.show = false">-->
-  <div class="login">
+  <div class="login" @click="$refs.verify.show = false">
     <Row @keydown.enter.native="submitLogin" class="flex">
       <Col style="width: 368px">
         <Header />
@@ -50,15 +49,15 @@
           </Row>
         </Row>
         <!-- 拼图验证码 -->
-<!--        <verify-->
-<!--          ref="verify"-->
-<!--          class="verify-con"-->
-<!--          verifyType="LOGIN"-->
-<!--          @change="verifyChange"-->
-<!--        ></verify>-->
-<!--        <Footer />-->
+        <verify
+          ref="verify"
+          class="verify-con"
+          verifyType="LOGIN"
+          @change="verifyChange"
+        ></verify>
+        <Footer />
       </Col>
-       <LangSwitch />
+      <!-- <LangSwitch /> -->
     </Row>
   </div>
 </template>

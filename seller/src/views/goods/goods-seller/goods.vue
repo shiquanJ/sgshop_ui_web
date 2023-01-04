@@ -9,6 +9,7 @@
           inline
           :label-width="70"
           class="search-form"
+
         >
           <Form-item label="商品名称" prop="goodsName">
             <Input
@@ -681,6 +682,7 @@ export default {
       this.loading = true;
       // 带多条件搜索参数获取表单数据
       getGoodsListDataSeller(this.searchForm).then((res) => {
+        console.log(res)
         this.loading = false;
         if (res.success) {
           this.data = res.result.records;
