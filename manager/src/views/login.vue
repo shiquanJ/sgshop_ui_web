@@ -139,10 +139,9 @@ export default {
       this.$refs.usernameLoginForm.validate((valid) => {
         if (valid) {
           if(this.checked){
-            this.isCookie?this.form.password = this.form.password:this.form.password = this.md5(this.form.password)
             this.setCookie(this.form.username,this.form.password,7)
           }else{
-            this.form.password = this.md5(this.form.password) //md5加密
+            this.form.password = this.form.password;
             this.setCookie("","",-1);
           }
           let fd = new FormData();
@@ -253,6 +252,9 @@ export default {
   .login-btn:hover {
     opacity: 0.9;
     border-radius: 10px;
+  }
+  .rememberMe{
+    padding-bottom: 10px;
   }
 }
 .flex {
