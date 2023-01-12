@@ -50,7 +50,7 @@ export const result = [{
           name: "category",
           level: 2,
           type: 0,
-          title: "店铺分类",
+          title: "商品分类",
           path: "category",
           component: "goods/goods-manage/category",
           children: null,

@@ -170,6 +170,7 @@ function getTokenDebounce() {
 }
 
 export const getRequest = (url, params, resBlob) => {
+  console.log(url)
   let accessToken = getStore("accessToken");
   let data = {
     method: "get",
