@@ -197,6 +197,7 @@
 
   import uploadPicInput from "@/components/sgstore/upload-pic-input";
   import { regular } from "@/utils";
+  import Cookies from "js-cookie";
   export default {
     name: "category",
     components: {
@@ -229,6 +230,7 @@
           deleteFlag: 0,
           commissionRate: 0,
           level: 0,
+          storeId: JSON.parse(Cookies.get("userInfoSeller")).id,
         },
         brandForm: {
           categoryBrands: [],
