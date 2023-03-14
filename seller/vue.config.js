@@ -84,7 +84,13 @@ module.exports = {
     }
   },
   devServer: {
-    port: configs.port
+    port: configs.port,
+    proxy:{
+      '/api':{
+        target:"http://8.142.251.252",
+        changeOrigin:true
+      }
+    }
   },
 
   // 打包时不生成.map文件 避免看到源码

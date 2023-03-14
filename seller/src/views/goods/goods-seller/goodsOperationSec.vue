@@ -14,8 +14,9 @@
               <span class="goods-category-name">{{
                 this.baseInfoForm.categoryName[0]
               }}</span>
-              <span> &gt; {{ this.baseInfoForm.categoryName[1] }}</span>
-              <span> &gt; {{ this.baseInfoForm.categoryName[2] }}</span>
+
+              <span v-if="this.baseInfoForm.categoryName.length > 1"> &gt; {{ this.baseInfoForm.categoryName[1] }}</span>
+              <span v-if="this.baseInfoForm.categoryName.length > 2"> &gt; {{ this.baseInfoForm.categoryName[2] }}</span>
             </FormItem>
             <FormItem label="商品名称" prop="goodsName">
               <Input
@@ -74,32 +75,6 @@
                   >{{ item }}
                 </Option>
               </Select>
-            </FormItem>
-            <FormItem
-              class="form-item-view-el"
-              label="销售模式"
-              prop="salesModel"
-            >
-              <RadioGroup
-                v-if="baseInfoForm.goodsType != 'VIRTUAL_GOODS'"
-                v-model="baseInfoForm.salesModel"
-                button-style="solid"
-                type="button"
-                @on-change="renderTableData(skuTableData)"
-              >
-                <Radio label="RETAIL" title="零售型">零售型</Radio>
-                <Radio label="WHOLESALE" title="批发型">批发型</Radio>
-              </RadioGroup>
-              <RadioGroup
-                v-else
-                v-model="baseInfoForm.salesModel"
-                button-style="solid"
-                type="button"
-              >
-                <Radio label="RETAIL" title="零售型">
-                  <span>虚拟型</span>
-                </Radio>
-              </RadioGroup>
             </FormItem>
             <FormItem
               v-if="baseInfoForm.salesModel == 'WHOLESALE'"
@@ -245,101 +220,6 @@
             </FormItem>
             <div class="layout" style="width: 100%">
               <Collapse v-model="open_panel">
-                <Panel name="1">
-                  自定义规格项
-                  <div slot="content">
-                    <Form>
-                      <div
-                        v-for="(item, $index) in skuInfo"
-                        :key="$index"
-                        class="sku-item-content"
-                      >
-                        <Card :bordered="true" class="ivu-card-body">
-                          <Button
-                            slot="extra"
-                            type="primary"
-                            @click="handleCloseSkuItem($index, item)"
-                          >
-                            删除规格
-                          </Button>
-                          <div>
-                            <FormItem
-                              class="sku-item-content-val flex"
-                              label="规格名"
-                            >
-                              <AutoComplete
-                                v-model="item.name"
-                                :data="skuData"
-                                :filter-method="filterMethod"
-                                :maxlength="30"
-                                placeholder="请输入规格名称"
-                                style="width: 150px"
-                                @on-focus="changeSkuItem(item.name)"
-                                @on-change="
-                                  editSkuItem(item.name, $index, item)
-                                "
-                              >
-                              </AutoComplete>
-                            </FormItem>
-                          </div>
-                          <div class="flex sku-val">
-                            <Form :model="item" class="flex">
-                              <!--规格值文本列表-->
-                              <FormItem
-                                v-for="(val, index) in item.spec_values"
-                                :key="index"
-                                class="sku-item-content-val flex"
-                                label="规格项"
-                              >
-                                <AutoComplete
-                                  ref="input"
-                                  v-model="val.value"
-                                  :data="skuVal"
-                                  :filter-method="filterMethod"
-                                  :maxlength="30"
-                                  placeholder="请输入规格项"
-                                  style="width: 150px"
-                                  @on-focus="changeSkuVals(val, item.name)"
-                                  @on-blur="checkSkuVal(val, index)"
-                                  @on-change="skuValueChange(val, index, item)"
-                                >
-                                </AutoComplete>
-                                <Button
-                                  size="small"
-                                  style="margin-left: 10px"
-                                  type="primary"
-                                  @click="handleCloseSkuValue(val, index, item)"
-                                >
-                                  删除
-                                </Button>
-                              </FormItem>
-                            </Form>
-                          </div>
-                          <div>
-                            <Button @click="addSpec($index, item)"
-                              >添加规格值
-                            </Button>
-                          </div>
-                        </Card>
-                      </div>
-                    </Form>
-                    <Button
-                      class="add-sku-btn"
-                      size="small"
-                      type="primary"
-                      @click="addSkuItem"
-                      >添加规格项
-                    </Button>
-                    &nbsp;
-                    <Button
-                      class="add-sku-btn"
-                      size="small"
-                      type="warning"
-                      @click="handleClearSku"
-                      >清空规格项
-                    </Button>
-                  </div>
-                </Panel>
                 <Panel name="2">
                   规格详细
                   <div slot="content">
@@ -512,7 +392,7 @@
           </div>
           <h4>商品详情描述</h4>
           <div class="form-item-view">
-            <div class="tree-bar">
+<!--            <div class="tree-bar">
               <FormItem
                 class="form-item-view-el"
                 label="店内分类"
@@ -528,7 +408,7 @@
                   @on-check-change="changeSelect"
                 ></Tree>
               </FormItem>
-            </div>
+            </div>-->
             <FormItem
               class="form-item-view-el"
               label="PC商品描述"
@@ -538,7 +418,7 @@
               <editor
                 ref="editor"
                 v-model="baseInfoForm.intro"
-                :init="{ ...initEditor, height: '800px' }"
+                :init="{ ...initEditor, height: '300px' }"
                 openXss
               ></editor>
               <div class="promise-intro-btn">
@@ -557,13 +437,13 @@
               <editor
                 ref="editor"
                 v-model="baseInfoForm.mobileIntro"
-                :init="{ ...initEditor, height: '800px' }"
+                :init="{ ...initEditor, height: '300px' }"
                 openXss
               ></editor>
             </FormItem>
           </div>
           <div v-if="baseInfoForm.goodsType != 'VIRTUAL_GOODS'">
-            <h4>商品物流信息</h4>
+<!--            <h4>商品物流信息</h4>
             <div class="form-item-view">
               <FormItem
                 class="form-item-view-el"
@@ -592,7 +472,7 @@
                   <span slot="append">kg</span></Input
                 >
               </FormItem>
-            </div>
+            </div>-->
             <h4>其他信息</h4>
             <div class="form-item-view">
               <FormItem
@@ -1141,6 +1021,8 @@ export default {
     },
     // 编辑时获取商品信息
     async GET_GoodData(id, draftId) {
+      console.log(id)
+      console.log(draftId)
       let response = {};
       if (draftId) {
         response = await API_GOODS.getDraftGoodsDetail(draftId);
@@ -1154,7 +1036,7 @@ export default {
         : (response.result.recommend = 0);
       this.baseInfoForm = { ...this.baseInfoForm, ...response.result };
       this.baseInfoForm.release = 1; //即使是被放入仓库，修改的时候也会显示会立即发布
-      this.categoryId = response.result.categoryPath.split(",")[2];
+      this.categoryId = response.result.categoryPath.split(",")[0];
 
       if (
         response.result.goodsGalleryList &&
@@ -1196,7 +1078,7 @@ export default {
           this.baseInfoForm.categoryName.push(cate.name);
           cateId.push(cate.id);
         });
-        this.categoryId = cateId[2];
+        this.categoryId = cateId[0];
 
         this.baseInfoForm.categoryPath = cateId.toString();
       }
@@ -1207,6 +1089,7 @@ export default {
     renderGoodsDetailSku(skuList) {
       let skus = [];
       let skusInfo = [];
+      console.log('skuList::'+JSON.stringify(skuList))
       skuList.map((e) => {
         let sku = {
           id: e.id,
@@ -1258,6 +1141,7 @@ export default {
         });
         skus.push(sku);
       });
+      console.log('skusInfo::'+JSON.stringify(skus))
       this.skuInfo = skusInfo;
       this.skuTableData = skus;
       this.renderTableData(skus);
@@ -1320,7 +1204,6 @@ export default {
         spec_values: [{ name: "", value: "" }],
         name: "",
       });
-
       this.renderTableData(this.skuTableData);
     },
     changeSkuItem(val) {
@@ -1542,10 +1425,10 @@ export default {
       this.skuInfo.forEach((sku) => {
         // 列名称
         let columnName = sku.name;
-        pushData.push({
+       /* pushData.push({
           title: columnName,
           key: columnName,
-        });
+        });*/
       });
 
       // 有成本价和价格的情况
@@ -1591,10 +1474,6 @@ export default {
           title: "货号",
           slot: "sn",
         },
-        {
-          title: "图片",
-          slot: "images",
-        }
       );
 
       this.skuTableColumn = pushData;
@@ -1618,6 +1497,7 @@ export default {
      * array spec数据
      */
     specIterator(result, spec, skus) {
+
       let table = result;
       if (spec.length > 0) {
         //清除当前循环的分组
@@ -1625,9 +1505,7 @@ export default {
         cloneTemp.shift();
         spec[0].spec_values.forEach((specItem) => {
           let index = this.skuIndex;
-          if (table[index]) {
-            table[index][spec[0].name] = specItem.value;
-          } else if (skus && skus[index] && specItem.value !== "") {
+          if (skus && skus[index] ) {
             let obj = {
               ...skus[index],
               id: skus[index].id,
@@ -1760,7 +1638,10 @@ export default {
       }
       this.baseInfoForm.storeCategoryPath = ids;
     },
-    /**  添加商品 **/
+    /**
+     * 添加商品
+     * API:
+     * **/
     save() {
       this.submitLoading = true;
       this.$refs["baseInfoForm"].validate((valid) => {
@@ -1829,7 +1710,11 @@ export default {
             ? (submit.recommend = true)
             : (submit.recommend = false);
           if (this.goodsId) {
-            API_GOODS.editGoods(this.goodsId, submit).then((res) => {
+            /**
+             * controller: GoodsStoreController.java
+             * API: /goods/goods/update/${goodsId}
+             */
+            API_GOODS.updateGoods(this.goodsId, submit).then((res) => {
               if (res.success) {
                 this.submitLoading = false;
                 this.$router.go(-1);
@@ -1838,6 +1723,10 @@ export default {
               }
             });
           } else {
+            /**
+             * controller: GoodsStoreController.java
+             * API: /goods/goods/create
+             */
             API_GOODS.createGoods(submit).then((res) => {
               if (res.success) {
                 this.submitLoading = false;
@@ -1931,12 +1820,12 @@ export default {
           this.baseInfoForm.categoryName.push(cate.name);
           cateId.push(cate.id);
         });
-        this.categoryId = cateId[2];
+        this.categoryId = cateId[0];
         this.baseInfoForm.categoryPath = cateId.toString();
         this.baseInfoForm.goodsType = this.firstData.goodsType;
         /** 获取该商城分类下 商品参数信息 */
         this.GET_GoodsParams();
-        /** 查询品牌列表 */
+        /** 查询品牌列表 */31
         this.getGoodsBrandList();
         /** 查询分类绑定的规格信息 */
         this.Get_SkuInfoByCategory(this.categoryId);
@@ -1944,6 +1833,8 @@ export default {
         this.GET_GoodsUnit();
         // 获取当前店铺分类
         this.GET_ShopGoodsLabel();
+
+        this.addSkuItem();
       }
     }
   },

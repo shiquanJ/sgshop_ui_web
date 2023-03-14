@@ -277,20 +277,22 @@ export default {
             }
             // 添加 避免编辑后传入id等数据
             delete this.form.id;
+            // API：/goods/spec
             insertSpec(this.form).then((res) => {
               this.submitLoading = false;
               if (res.success) {
-                this.$Message.success("操作成功");
+                this.$Message.success("添加成功");
                 this.getDataList();
                 this.modalVisible = false;
               }
             });
           } else {
             // 编辑
+            // API：/goods/spec/${id}
             updateSpec(this.form.id, this.form).then((res) => {
               this.submitLoading = false;
               if (res.success) {
-                this.$Message.success("操作成功");
+                this.$Message.success("修改成功");
                 this.getDataList();
                 this.modalVisible = false;
               }

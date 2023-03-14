@@ -9,10 +9,10 @@ var BASE = {
     manager: "http://localhost:8887"
   },
   API_PROD: {
-    common: "https://common-api.pickmall.cn",
-    buyer: "https://buyer-api.pickmall.cn",
-    seller: "https://store-api.pickmall.cn",
-    manager: "https://admin-api.pickmall.cn"
+    common: "http://8.142.251.252:8890",
+    buyer: "http://8.142.251.252:8888",
+    seller: "http://8.142.251.252:8889",
+    manager: "http://8.142.251.252:8887"
   },
   /**
    * @description // 跳转买家端地址 pc端

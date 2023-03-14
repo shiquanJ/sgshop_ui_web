@@ -271,7 +271,7 @@ export function createGoods(params) {
   });
 }
 
-export function editGoods(goodsId, params) {
+export function updateGoods(goodsId, params) {
   return putRequest(`/goods/goods/update/${goodsId}`, params, {
     "Content-Type": "application/json"
   });

@@ -25,7 +25,7 @@
                 </div>
               </FormItem>
               <FormItem label="店铺名称" prop="storeName">
-                <Input v-model="shopForm.storeName" clearable style="width: 350px" />
+                <Input v-model="shopForm.storeName" clearable style="width: 350px" placeholder="店铺名称长度为1-200位"/>
               </FormItem>
 
               <FormItem label="是否自营" prop="selfOperated">
@@ -39,26 +39,6 @@
                 </RadioGroup>
               </FormItem>
 
-              <FormItem label="店铺定位" prop="shopCenter">
-                <!-- <Input v-model="shopForm.storeCenter" @on-focus="$refs.liliMap.showMap = true" clearable style="width: 350px" /> -->
-                <Button
-                  type="info"
-                  v-if="!shopForm.storeCenter"
-                  @click="$refs.liliMap.showMap = true"
-                  >点击获取店铺定位</Button
-                >
-                <Button type="success" v-else @click="$refs.liliMap.showMap = true"
-                  >已定位</Button
-                >
-              </FormItem>
-
-              <FormItem label="店铺所在地" prop="storeAddressPath">
-                <Input
-                  disabled
-                  v-model="shopForm.storeAddressPath"
-                  style="width: 350px"
-                />
-              </FormItem>
               <FormItem label="店铺详细地址" prop="storeAddressDetail">
                 <Input
                   v-model="shopForm.storeAddressDetail"
@@ -92,6 +72,7 @@
                   show-word-limit
                   clearable
                   style="width: 400px"
+                  placeholder="店铺简介需在1-200字符之间"
                 />
               </FormItem>
               <br />
@@ -279,8 +260,8 @@
               <Spin fix v-if="loading"></Spin>
             </div>
           </TabPane>
-          <TabPane label="经营范围" class="tab" name="category">
-            <!-- 遮罩层  -->
+<!--          <TabPane label="经营范围" class="tab" name="category">
+            &lt;!&ndash; 遮罩层  &ndash;&gt;
             <div v-if="isRead" class="mask">只读不可修改</div>
             <FormItem label="经营类目" prop="goodsManagementCategory">
               <div>
@@ -297,7 +278,7 @@
                 </Checkbox>
               </CheckboxGroup>
             </FormItem>
-          </TabPane>
+          </TabPane>-->
 
           <!-- <TabPane label="配送信息" class="tab" name="send"> -->
             <!-- 遮罩层  -->
@@ -311,7 +292,7 @@
             </FormItem> -->
           <!-- </TabPane> -->
 
-          <TabPane label="结算信息" class="tab" name="settlement">
+<!--          <TabPane label="结算信息" class="tab" name="settlement">
             <Alert type="error"
               >已添加<span class="theme_color">{{ settlementCycle.length }}</span
               >个结算日，最多可添加5个结算日，当月不包含所设日期时，将会顺延到下一个结算日</Alert
@@ -350,7 +331,7 @@
                 >确认
               </Button>
             </FormItem>
-          </TabPane>
+          </TabPane>-->
         </Form>
       </Tabs>
       <div align="center">
@@ -444,7 +425,8 @@ export default {
       addSettlementBtn: true, // 添加结算日按钮
       day: 1, //结算日
       tabName: "base", // tab栏name值
-      tabNameList: ["base", "entry", "category", "settlement"], // tab栏name值数组
+      //tabNameList: ["base", "entry", "category", "settlement"], // tab栏name值数组
+      tabNameList: ["base", "entry"], // tab栏name值数组
       shopValidate: {
         // 表单验证规则
         memberName: [{ required: true, message: "会员不能为空" }],
