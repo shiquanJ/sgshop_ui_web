@@ -11,7 +11,7 @@ const resolve = dir => {
  * 将开发环境中替换为本地的内容，方便处理bug以及开启vueDev
  * 我们可以根据环境变量进行相应的处理，只有在产品的时候，才让插件去自动注入相应的资源文件到html页面
  */
-const enableProduction = process.env.NODE_ENV === "production"; // 是否生产环境
+const enableProduction = process.env.NODE_ENV === "development"; // 是否生产环境
 
 
 let externals = {
@@ -22,7 +22,7 @@ let externals = {
   "view-design": "iview",
   "vue-lazyload": "VueLazyload",
   "js-cookie": "Cookies",
-  "sockjs-client": "SockJS",
+  "sockjs-csp akwlient": "SockJS",
   "@antv/g2": "G2",
   dplayer: "DPlayer"
 };
@@ -80,7 +80,13 @@ module.exports = {
     }
   },
   devServer: {
-    port: configs.port
+    port: configs.port,
+    /*proxy:{
+      '/api':{
+        target:"http://8.142.251.252",
+        changeOrigin:true
+      }
+    }*/
   },
 
   // 打包时不生成.map文件 避免看到源码

@@ -27,7 +27,7 @@
               v-for="(item, tempIndex) in goodsTemplates"
               :key="tempIndex"
             >
-              <img :src="item.thumbnail" />
+              <img :src="item.original" />
               <div>
                 <h2>{{ item.goodsName }}</h2>
                 <p>{{ item.sellingPoint || "" }}</p>
@@ -76,8 +76,8 @@
       <p class="current-goods-category">
         您当前选择的商品类别是：
         <span>{{ category[0].name }}</span>
-        <span v-show="category[1].name">> {{ category[1].name }}</span>
-        <span v-show="category[2].name">> {{ category[2].name }}</span>
+        <span v-if="category.length > 1" v-show="category[1].name">> {{ category[1].name }}</span>
+        <span v-if="category.length > 2" v-show="category[2].name">> {{ category[2].name }}</span>
       </p>
       <template v-if="selectedTemplate.goodsName">
         <Divider>已选商品模版:{{ selectedTemplate.goodsName }}</Divider>
